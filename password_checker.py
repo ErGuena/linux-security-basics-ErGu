@@ -1,10 +1,17 @@
 import re
 
+# Sperrliste für häufig erratene Passwörter (in Kleinschreibung)
+BLACKLIST = ["passwort123!", "admin2026!", "sommer2026!", "krankenhaus1!", "qwertz12345!"]
+
 def check_password_strength(password):
+    # Zuerst prüfen, ob das Passwort auf der Sperrliste steht
+    if password.lower() in BLACKLIST:
+        return 0, ["- WARNUNG: Dieses Passwort steht auf der Sperrliste (zu leicht zu erraten)!"]
+
     score = 0
     feedback = []
 
-    # 1. Länge prüfen (mindestens 12 Zeichen)
+    # 1. Länge prüfen
     if len(password) >= 12:
         score += 1
     else:
@@ -30,15 +37,24 @@ def check_password_strength(password):
 
     return score, feedback
 
-print("=== CYBER SECURITY PASSWORD POLICY CHECKER ===")
-test_pw = input("Gib ein Test-Passwort zur Prüfung ein: ")
-score, tips = check_password_strength(test_pw)
+print("=== CYBER SECURITY PASSWORD POLICY CHECKER v2.0 ===")
+print("(Tippe 'exit' zum Beenden)\n")
 
-print(f"\nSicherheits-Score: {score}/4")
-if score == 4:
-    print("Status: STARK (Entspricht modernen Sicherheitsrichtlinien)")
-else:
-    print("Status: SCHWACH – Verbesserungsvorschläge:")
-    for tip in tips:
-        print(tip)
+# Endlosschleife: läuft so lange, bis der Nutzer 'exit' eingibt
+while True:
+    test_pw = input("Passwort zum Prüfen eingeben: ")
+    
+    if test_pw.lower() == "exit":
+        print("Programm beendet.")
+        break
 
+    score, tips = check_password_strength(test_pw)
+
+    print(f"Sicherheits-Score: {score}/4")
+    if score == 4:
+        print("Status: STARK\n")
+    else:
+        print("Status: SCHWACH – Verbesserungsvorschläge:")
+        for tip in tips:
+            print(tip)
+        print("")
