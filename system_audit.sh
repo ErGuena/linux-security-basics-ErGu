@@ -14,8 +14,7 @@ echo "[3] Aktive Netzwerkverbindungen & offene Ports:"
 ss -tuln
 echo ""
 echo "[4] Letzte 5 System-Logins:"
-last -n 5
+journalctl -n 5 -u systemd-logind --no-pager
 echo ""
 echo "Audit abgeschlossen."
-0
 
